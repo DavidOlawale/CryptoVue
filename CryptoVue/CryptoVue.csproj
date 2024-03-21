@@ -15,4 +15,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CryptoVue.Data\CryptoVue.Data.csproj" />
+  </ItemGroup>
+
 </Project>
