@@ -1,0 +1,6 @@
+@CryptoVue_HostAddress = http://localhost:5099
+
+GET {{CryptoVue_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
