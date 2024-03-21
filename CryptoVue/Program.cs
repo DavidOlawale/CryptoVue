@@ -1,3 +1,9 @@
+using CryptoVue.Authentication;
+using CryptoVue.Services;
+using CryptoVue.Services.Implementation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace CryptoVue
 {
@@ -7,7 +13,36 @@ namespace CryptoVue
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            var jwtOptionsSection = builder.Configuration.GetRequiredSection("Jwt");
+            builder.Services.Configure<JwtOptions>(jwtOptionsSection);
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(jwtOptions =>
+            {
+                var configKey = jwtOptionsSection["Key"];
+                var key = Encoding.UTF8.GetBytes(configKey);
+
+                jwtOptions.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = jwtOptionsSection["Issuer"],
+                    ValidAudience = jwtOptionsSection["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = true
+                };
+            });
+
+            builder.Services.AddAuthorization();
+
+            builder.Services.AddTransient<IJwtService, JwtService>();
+            builder.Services.AddTransient<IUserService, UserService>();
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -25,6 +60,7 @@ namespace CryptoVue
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
