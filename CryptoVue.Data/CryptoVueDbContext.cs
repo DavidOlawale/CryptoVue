@@ -27,15 +27,16 @@ namespace CryptoVue.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<User>().HasData(
-                MakeUser("user@app.com", "password@123", Roles.Admin),
-                MakeUser("user@app.com", "password@123", Roles.Admin)
+                MakeUser(1, "olawaledavid11@gmail.com", "password@123", Roles.Admin),
+                MakeUser(2, "user@app.com", "password@123", Roles.Admin)
                 );
         }
 
-        private User MakeUser(string email, string password, string role = "Admin")
+        private User MakeUser(int id, string email, string password, string role = "Admin")
         {
             return new User
             {
+                Id = id,
                 Email = email,
                 Role = role,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(password)

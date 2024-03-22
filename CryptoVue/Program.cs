@@ -1,4 +1,5 @@
 using CryptoVue.Authentication;
+using CryptoVue.Data;
 using CryptoVue.Services;
 using CryptoVue.Services.Implementation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -49,10 +50,11 @@ namespace CryptoVue
 
             builder.Services.AddTransient<IJwtService, JwtService>();
             builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddScoped<CryptoVueDbContext>();
 
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

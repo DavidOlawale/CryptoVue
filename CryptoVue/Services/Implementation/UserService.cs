@@ -1,23 +1,21 @@
-﻿using CryptoVue.Data.Models;
+﻿using CryptoVue.Data;
+using CryptoVue.Data.Models;
 
 namespace CryptoVue.Services.Implementation
 {
     public class UserService: IUserService
     {
         private readonly List<User> _users;
+        private readonly CryptoVueDbContext _dbContext;
 
-        public UserService()
+        public UserService(CryptoVueDbContext dbContext)
         {
-            _users = new List<User>
-            {
-                new User{ Email = "olawaledavid11@gmail.com", Role = "Admin", PasswordHash = BCrypt.Net.BCrypt.HashPassword("password@123") },
-                new User{ Email = "davolawale1@gmail.com", Role = "Admin", PasswordHash = BCrypt.Net.BCrypt.HashPassword("password1@321"), },
-            };
+            this._dbContext = dbContext;
         }
 
         public User? GetUser(string email)
         {
-            return _users.SingleOrDefault(u => u.Email == email);
+            return _dbContext.Users.SingleOrDefault(u => u.Email == email);
         }
 
         public bool IsAuthenticated(string password, string passwordHash)
