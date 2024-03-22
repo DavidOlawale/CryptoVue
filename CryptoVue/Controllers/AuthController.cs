@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CryptoVue.Controllers
 {
-    [AllowAnonymous]
     [ApiController]
     [Route("api/auth")]
     public class AuthController : BaseController

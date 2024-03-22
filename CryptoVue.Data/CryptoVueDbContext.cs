@@ -20,7 +20,7 @@ namespace CryptoVue.Data
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<CryptoToken> CryptoTokens { get; set; }
+        public DbSet<CryptoTokenSnapshot> CryptoTokenSnapshots { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

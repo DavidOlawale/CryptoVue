@@ -29,7 +29,7 @@ namespace CryptoVue.Services.Implementation
                     new Claim(ClaimTypes.Email, user.Email),
                     new Claim(ClaimTypes.Role, user.Role)
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(5),
+                Expires = DateTime.UtcNow.AddMinutes(15),
                 Issuer = _options.Issuer,
                 Audience = _options.Audience,
                 SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)

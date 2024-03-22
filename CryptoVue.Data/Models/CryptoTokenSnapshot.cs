@@ -7,15 +7,18 @@ using System.Threading.Tasks;
 
 namespace CryptoVue.Data.Models
 {
-    public class CryptoToken: Base.BaseEntity
+    public class CryptoTokenSnapshot: Base.BaseEntity
     {
         [Required]
-        public int Name { get; set; }
+        public string Name { get; set; }
 
         [Required]
-        public long TotalSupply { get; set; }
+        public string TotalSupply { get; set; }
 
         [Required]
-        public long CirculatingSupply { get; set; }
+        public string CirculatingSupply { get; set; }
+
+        [Required]
+        public DateTime CaptureDate { get; set; }
     }
 }
