@@ -15,7 +15,7 @@ namespace CryptoVue.Services.Implementation
             };
         }
 
-        public User GetUser(string email)
+        public User? GetUser(string email)
         {
             return _users.SingleOrDefault(u => u.Email == email);
         }

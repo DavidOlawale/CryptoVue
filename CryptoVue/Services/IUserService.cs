@@ -4,7 +4,7 @@ namespace CryptoVue.Services
 {
     public interface IUserService
     {
-        User GetUser(string? username);
+        User? GetUser(string username);
         bool IsAuthenticated(string password, string passwordHash);
     }
 }

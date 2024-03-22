@@ -23,13 +23,14 @@ namespace CryptoVue.Controllers
         public IActionResult GetToken(string email, string password)
         {
             var storedUser = _userService.GetUser(email);
-            if (!_userService.IsAuthenticated(password, storedUser.PasswordHash))
+
+            if (storedUser is not null && _userService.IsAuthenticated(password, storedUser!.PasswordHash))
             {
-                return Unauthorized();
+                var tokenString = _jwtService.GenerateToken(storedUser);
+                return Ok(new { token = tokenString });
             }
 
-            var tokenString = _jwtService.GenerateToken(storedUser);
-            return Ok(new { token = tokenString });
+            return Unauthorized();
         }
     }
 }
