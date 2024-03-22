@@ -18,6 +18,9 @@ namespace CryptoVue.Controllers
             this._userService = userService;
             this._jwtService = jwtService;
         }
+
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         [HttpPost("token")]
         public IActionResult GetToken(string email, string password)
         {

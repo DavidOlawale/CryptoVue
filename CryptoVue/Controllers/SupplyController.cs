@@ -1,11 +1,12 @@
-﻿using CryptoVue.Services;
+﻿using CryptoVue.Data.Models;
+using CryptoVue.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CryptoVue.Controllers
 {
 
-    //[Authorize]
+    [Authorize]
     [Route("api/supply")]
     public class SupplyController : BaseController
     {
@@ -21,6 +22,12 @@ namespace CryptoVue.Controllers
         {
             await tokenService.FetchTokenDataAsync();
             return Created();
+        }
+
+        [HttpGet("getsupply")]
+        public IEnumerable<CryptoTokenSnapshot> GetSuppy()
+        {
+            return tokenService.GetStoredDataAsync();
         }
     }
 }

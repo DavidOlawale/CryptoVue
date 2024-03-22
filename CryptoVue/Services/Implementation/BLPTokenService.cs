@@ -1,6 +1,7 @@
 ﻿using CryptoVue.Common.BscScan;
 using CryptoVue.Data;
 using CryptoVue.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Numerics;
 using System.Text.Json;
 
@@ -12,7 +13,7 @@ namespace CryptoVue.Services.Implementation
         private readonly string bscscanApiKey;
         private readonly string BLPTokenContractAddress = "0xfE1d7f7a8f0bdA6E415593a2e4F82c64b446d404";
         private readonly CryptoVueDbContext dbContext;
-        private string addressesToWatch = 
+        private string monitoredAddressed = 
             "0x000000000000000000000000000000000000dEaD,"
             + "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56,"
             + "0xfE1d7f7a8f0bdA6E415593a2e4F82c64b446d404,"
@@ -34,26 +35,33 @@ namespace CryptoVue.Services.Implementation
         public async Task FetchTokenDataAsync()
         {
             TokenSupplyResponse? totalSupply = null;
-            TokenSupplyResponse? nonCirculatingSupply = null;
-
+            MultiAccountTokenBalanceResponse? nonCirculatingSupply = null;
+            BigInteger CirculatingSupplyFigure = BigInteger.Zero;
+            BigInteger nonCirculatingSupplyFigure = BigInteger.Zero;
 
             using (var httpClient = new HttpClient())
             {
+                // Fetch total supply
                 var totalSupplyUrl = $"{bscscanApiUrl}?module=stats&action=tokenCsupply&contractaddress={BLPTokenContractAddress}&apikey={bscscanApiKey}";
 
                 var totalSupplyResponse = await httpClient.GetAsync(totalSupplyUrl);
                 var totalSupplyjsonResponse = await totalSupplyResponse.Content.ReadAsStringAsync();
                 totalSupply = JsonSerializer.Deserialize<TokenSupplyResponse>(totalSupplyjsonResponse)!;
 
-
-                var noncirculatingSupplyUrl = $"https://api.bscscan.com/api?module=account&action=balancemulti&address={addressesToWatch}&apikey={bscscanApiKey}";
+                // Then fetch account balance of monitored addresses
+                var noncirculatingSupplyUrl = $"https://api.bscscan.com/api?module=account&action=balancemulti&address={monitoredAddressed}&apikey={bscscanApiKey}";
                 var nonCirculatingSupplyResponse = await httpClient.GetAsync(noncirculatingSupplyUrl);
                 var nonCirculatingjsonResponse = await nonCirculatingSupplyResponse.Content.ReadAsStringAsync();
-                nonCirculatingSupply = JsonSerializer.Deserialize<TokenSupplyResponse>(nonCirculatingjsonResponse)!;
+                nonCirculatingSupply = JsonSerializer.Deserialize<MultiAccountTokenBalanceResponse>(nonCirculatingjsonResponse)!;
+            }
+
+            foreach (var account in nonCirculatingSupply.Result)
+            {
+                CirculatingSupplyFigure += BigInteger.Parse(account.Balance);
             }
 
             var totalSupplyFigure = BigInteger.Parse(totalSupply.Result);
-            var nonCirculatingSupplyFigure = BigInteger.Parse(nonCirculatingSupply.Result);
+            nonCirculatingSupplyFigure = totalSupplyFigure - CirculatingSupplyFigure;
 
             var circulatingSupplyFigure = totalSupplyFigure - nonCirculatingSupplyFigure;
 
@@ -67,6 +75,12 @@ namespace CryptoVue.Services.Implementation
 
             await dbContext.CryptoTokenSnapshots.AddAsync(snapshot);
             await dbContext.SaveChangesAsync();
+        }
+
+
+        public IEnumerable<CryptoTokenSnapshot> GetStoredDataAsync()
+        {
+            return dbContext.CryptoTokenSnapshots.ToList();
         }
     }
 }
