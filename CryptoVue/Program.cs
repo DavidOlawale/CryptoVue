@@ -51,6 +51,7 @@ namespace CryptoVue
             builder.Services.AddTransient<IJwtService, JwtService>();
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddScoped<CryptoVueDbContext>();
+            builder.Services.AddScoped<IBLPTokenService, BLPTokenService>();
 
 
             builder.Services.AddControllers();
