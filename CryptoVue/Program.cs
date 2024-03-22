@@ -2,6 +2,7 @@ using CryptoVue.Authentication;
 using CryptoVue.Services;
 using CryptoVue.Services.Implementation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -36,6 +37,12 @@ namespace CryptoVue
                     ValidateLifetime = false,
                     ValidateIssuerSigningKey = true
                 };
+            });
+
+            builder.Services.AddDbContext<CryptoVue.Data.CryptoVueDbContext>(options =>
+            {
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("CryptoVueConnection"));
             });
 
             builder.Services.AddAuthorization();
