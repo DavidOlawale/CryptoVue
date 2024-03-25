@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace CryptoVue.Controllers
 {
 
-    [Authorize]
     [Route("api/supply")]
     public class SupplyController : BaseController
     {
@@ -17,6 +16,7 @@ namespace CryptoVue.Controllers
             this.tokenService = tokenService;
         }
 
+        [Authorize]
         [HttpPost("calculatesupply")]
         public async Task<IActionResult> CalculateSupply()
         {
@@ -25,9 +25,9 @@ namespace CryptoVue.Controllers
         }
 
         [HttpGet("getsupply")]
-        public IEnumerable<CryptoTokenSnapshot> GetSuppy()
+        public async Task<ActionResult<CryptoTokenSnapshot?>> GetSuppy()
         {
-            return tokenService.GetStoredDataAsync();
+            return await tokenService.GetStoredDataAsync();
         }
     }
 }

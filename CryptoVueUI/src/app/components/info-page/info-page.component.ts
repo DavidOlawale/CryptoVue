@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { TokenService } from '../../services/token.service';
 
 @Component({
   selector: 'app-info-page',
@@ -7,6 +8,24 @@ import { Component } from '@angular/core';
   templateUrl: './info-page.component.html',
   styleUrl: './info-page.component.css'
 })
-export class InfoPageComponent {
+export class InfoPageComponent implements OnInit {
+  tokenData: TokenData | null = null;
 
+  constructor(private tokenService: TokenService){
+  }
+  
+  ngOnInit() {
+    this.tokenService.getTokenData()
+      .subscribe(data => {
+        this.tokenData = data;
+      });
+  }
+
+}
+
+
+export interface TokenData {
+  name: string;
+  totalSupply: number;
+  circulatingSupply: number;
 }

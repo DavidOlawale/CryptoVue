@@ -1,3 +1,17 @@
-<p>info-page works!</p>
-
-<button class="btn btn-primary">Sample button</button>
+<div class="info-container">
+    <h2>BLP Token Supply</h2>
+    <ul>
+      <li>
+        <span class="info-label">Name:</span>
+        <span class="info-value">{{ tokenData?.name }}</span>
+      </li>
+      <li>
+        <span class="info-label">Total Supply:</span>
+        <span class="info-value">{{ tokenData?.totalSupply }}</span>
+      </li>
+      <li>
+        <span class="info-label">Circulating Supply:</span>
+        <span class="info-value">{{ tokenData?.circulatingSupply }}</span>
+      </li>
+    </ul>
+  </div>

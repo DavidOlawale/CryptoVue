@@ -78,9 +78,9 @@ namespace CryptoVue.Services.Implementation
         }
 
 
-        public IEnumerable<CryptoTokenSnapshot> GetStoredDataAsync()
+        public async Task<CryptoTokenSnapshot?> GetStoredDataAsync()
         {
-            return dbContext.CryptoTokenSnapshots.ToList();
+            return await dbContext.CryptoTokenSnapshots.OrderByDescending(c => c.CaptureDate).FirstOrDefaultAsync();
         }
     }
 }

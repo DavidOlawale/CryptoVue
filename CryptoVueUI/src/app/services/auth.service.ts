@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { environment } from '../../environments/environment';
 import { Observable, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode'
@@ -14,7 +14,7 @@ export class AuthService {
    }
 
   login(email: string, password: string): Observable<any>{
-    let url = `${environment.apiUrl}/auth/login`
+    let url = `${environment.apiUrl}/auth/login`;
 
     return this.http.post<any>(url, {email, password}, { headers: { 'Content-Type': 'application/json'} } )
     .pipe(
