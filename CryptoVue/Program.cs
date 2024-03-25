@@ -16,6 +16,24 @@ namespace CryptoVue
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddCors(
+            //    options =>
+            //{
+                //Allow Angular Client app
+
+            //    options.AddPolicy("AllowSpecificOrigin",
+            //        builder =>
+            //        {
+            //            //builder.WithOrigins("http://localhost:4200")
+
+            //            builder.WithOrigins("*")
+            //            .AllowAnyMethod()
+            //            .AllowAnyHeader()
+            //            .AllowAnyOrigin();
+            //        });
+            //}
+            );
+
             var jwtOptionsSection = builder.Configuration.GetRequiredSection("Jwt");
             builder.Services.Configure<JwtOptions>(jwtOptionsSection);
 
@@ -88,6 +106,15 @@ namespace CryptoVue
 
             var app = builder.Build();
 
+            app.UseCors(options =>
+            {
+                options.WithOrigins("http://localhost:4200")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowAnyOrigin();
+
+            });
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -99,7 +126,6 @@ namespace CryptoVue
 
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

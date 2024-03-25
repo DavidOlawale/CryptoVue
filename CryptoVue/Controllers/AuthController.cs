@@ -1,4 +1,5 @@
-﻿using CryptoVue.Data.Models;
+﻿using CryptoVue.Authentication;
+using CryptoVue.Data.Models;
 using CryptoVue.Services;
 using CryptoVue.Services.Implementation;
 using Microsoft.AspNetCore.Authorization;
@@ -21,15 +22,15 @@ namespace CryptoVue.Controllers
 
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        [HttpPost("token")]
-        public IActionResult GetToken(string email, string password)
+        [HttpPost("login")]
+        public IActionResult Login(LoginModel model)
         {
-            var storedUser = _userService.GetUser(email);
+            var user = _userService.GetUser(model.Email);
 
-            if (storedUser is not null && _userService.IsAuthenticated(password, storedUser!.PasswordHash))
+            if (user is not null && _userService.IsAuthenticated(model.Password, user!.PasswordHash))
             {
-                var tokenString = _jwtService.GenerateToken(storedUser);
-                return Ok(new { token = tokenString });
+                var token = _jwtService.GenerateToken(user);
+                return Ok(new { token });
             }
 
             return Unauthorized();
