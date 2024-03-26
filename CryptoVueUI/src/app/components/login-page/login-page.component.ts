@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BaseComponent } from '../../BaseComponent';
 import { ToastrService } from 'ngx-toastr';
@@ -9,22 +9,28 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css'
 })
 export class LoginPageComponent extends BaseComponent {
-  email = '';
-  password = '';
-  errorMessage: string | null = null;
+  public loginForm: FormGroup;
 
-  constructor(private authService: AuthService, private router: Router, private toastr: ToastrService){
+  constructor(private authService: AuthService, private router: Router, private toastr: ToastrService, private formBuilder: FormBuilder){
     super(toastr);
+
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
   }
 
   onSubmit() {
-    this.errorMessage = null; // Clear previous error message
-    this.authService.login(this.email, this.password)
+    let formValues = this.loginForm.value;
+    let email = formValues.email;
+    let password = formValues.password
+
+    this.authService.login(email, password)
       .subscribe({
         next: () => {
           this.showMessage('success', 'Login successful', '')
@@ -32,7 +38,6 @@ export class LoginPageComponent extends BaseComponent {
         },
         error: (error) => {
           this.showMessage('error', 'an error occured', '')
-          this.errorMessage = error.message || 'Login failed!';
         }
       }
     );

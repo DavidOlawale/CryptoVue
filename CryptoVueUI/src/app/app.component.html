@@ -1,3 +1,26 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+
+
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="">Crypto Vue</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse d-flex justify-content-end px-5 py-2" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto"> <li class="nav-item">
+          <a class="nav-link active" routerLink="" routerLinkActive="active">Supply</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"  routerLink="/update" routerLinkActive="active" *ngIf="authService.isLoggedIn()">Update Supply</a>
+        </li>
+        <li class="nav-item mr-auto">
+          <a class="nav-link" routerLink="/login" routerLinkActive="active" >Login</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 <main class="main"> 
   <router-outlet />  
 </main>

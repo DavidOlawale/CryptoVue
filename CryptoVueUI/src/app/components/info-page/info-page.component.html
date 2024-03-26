@@ -1,6 +1,6 @@
 <div class="info-container">
     <h2>BLP Token Supply</h2>
-    <ul>
+    <ul class="mb-5">
       <li>
         <span class="info-label">Name:</span>
         <span class="info-value">{{ tokenData?.name }}</span>
@@ -14,4 +14,9 @@
         <span class="info-value">{{ tokenData?.circulatingSupply }}</span>
       </li>
     </ul>
+    
+    <div>
+      <a *ngIf="tokenData && authService.isLoggedIn()" class="btn btn-primary" routerLink="/update">Update Supply</a>
+    </div>
+    
   </div>

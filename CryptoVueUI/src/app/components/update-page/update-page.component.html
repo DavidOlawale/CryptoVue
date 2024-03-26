@@ -1,7 +1,7 @@
 <div class="update-container">
     <h2>Update Supply Data</h2>
     <p>Click the button below to calculate and store the latest circulating supply of BLP tokens.</p>
-    <button (click)="updateSupply()" [disabled]="isUpdating">
+    <button class="btn btn-primary" (click)="updateSupply()" [disabled]="isUpdating">
       {{ isUpdating ? 'Updating...' : 'Update Supply' }}
     </button>
     <div *ngIf="errorMessage">
