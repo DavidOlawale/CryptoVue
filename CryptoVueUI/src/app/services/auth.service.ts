@@ -36,19 +36,20 @@ export class AuthService {
 
   public GetUser(): any {
     if(this.isLoggedIn()){
-      console.log(jwtDecode(this.getToken()))
-      return jwtDecode(this.getToken())
+      return jwtDecode(this.getToken());
+    }
+    else{
+      return null;
     }
   }
 
   public isLoggedIn(): boolean {
     if(this.getToken() != null){
-      return true;
+      let tokenEpiryDate = new Date(jwtDecode(this.getToken()).exp! * 1000); // Convert from seconds to milliseconds
+      return tokenEpiryDate > new Date();  
     }
-    else{
-      return false;
-    }
-     
+    
+    return false;
   }
  
 }

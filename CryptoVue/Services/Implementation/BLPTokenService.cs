@@ -36,8 +36,8 @@ namespace CryptoVue.Services.Implementation
         {
             TokenSupplyResponse? totalSupply = null;
             MultiAccountTokenBalanceResponse? nonCirculatingSupply = null;
-            BigInteger CirculatingSupplyFigure = BigInteger.Zero;
-            BigInteger nonCirculatingSupplyFigure = BigInteger.Zero;
+            double CirculatingSupplyFigure = 0;
+            double nonCirculatingSupplyFigure = 0;
 
             using (var httpClient = new HttpClient())
             {
@@ -49,7 +49,7 @@ namespace CryptoVue.Services.Implementation
                 totalSupply = JsonSerializer.Deserialize<TokenSupplyResponse>(totalSupplyjsonResponse)!;
 
                 // Then fetch account balance of monitored addresses
-                var noncirculatingSupplyUrl = $"https://api.bscscan.com/api?module=account&action=balancemulti&address={monitoredAddressed}&apikey={bscscanApiKey}";
+                 var noncirculatingSupplyUrl = $"https://api.bscscan.com/api?module=account&action=balancemulti&address={monitoredAddressed}&apikey={bscscanApiKey}";
                 var nonCirculatingSupplyResponse = await httpClient.GetAsync(noncirculatingSupplyUrl);
                 var nonCirculatingjsonResponse = await nonCirculatingSupplyResponse.Content.ReadAsStringAsync();
                 nonCirculatingSupply = JsonSerializer.Deserialize<MultiAccountTokenBalanceResponse>(nonCirculatingjsonResponse)!;
@@ -57,30 +57,63 @@ namespace CryptoVue.Services.Implementation
 
             foreach (var account in nonCirculatingSupply.Result)
             {
-                CirculatingSupplyFigure += BigInteger.Parse(account.Balance);
+                CirculatingSupplyFigure += ConvertApiBalanceToDecimalFigure(account.Balance);
             }
 
-            var totalSupplyFigure = BigInteger.Parse(totalSupply.Result);
+            var totalSupplyFigure = ConvertApiBalanceToDecimalFigure(totalSupply.Result);
             nonCirculatingSupplyFigure = totalSupplyFigure - CirculatingSupplyFigure;
 
             var circulatingSupplyFigure = totalSupplyFigure - nonCirculatingSupplyFigure;
 
-            var snapshot = new CryptoTokenSnapshot
+            var tokenData = await dbContext.TokenDataRecords.FirstOrDefaultAsync();
+            if (tokenData != null)
             {
-                Name = "BLP token",
-                TotalSupply = totalSupply.Result,
-                CirculatingSupply = circulatingSupplyFigure.ToString(),
-                CaptureDate = DateTime.Now,
-            };
+                tokenData.TotalSupply = totalSupplyFigure;
+                tokenData.CirculatingSupply = nonCirculatingSupplyFigure;
+                tokenData.CaptureDate = DateTime.Now;
 
-            await dbContext.CryptoTokenSnapshots.AddAsync(snapshot);
-            await dbContext.SaveChangesAsync();
+                dbContext.TokenDataRecords.Update(tokenData);
+                await dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                tokenData = new TokenDataRecord
+                {
+                    Name = "BLP token",
+                    TotalSupply = totalSupplyFigure,
+                    CirculatingSupply = circulatingSupplyFigure,
+                    CaptureDate = DateTime.Now,
+                };
+
+                await dbContext.TokenDataRecords.AddAsync(tokenData);
+                await dbContext.SaveChangesAsync();
+            }
+
         }
 
 
-        public async Task<CryptoTokenSnapshot?> GetStoredDataAsync()
+        public async Task<TokenDataRecord?> GetStoredDataAsync()
         {
-            return await dbContext.CryptoTokenSnapshots.OrderByDescending(c => c.CaptureDate).FirstOrDefaultAsync();
+            return await dbContext.TokenDataRecords.OrderByDescending(c => c.CaptureDate).FirstOrDefaultAsync();
+        }
+
+        public double ConvertApiBalanceToDecimalFigure(string balance)
+        {
+            if (balance == "0")
+            { 
+                return 0;
+            }
+            // Extract the integer part (since api returns figures with 18 decimal places without a dot)
+            string integerPart = balance.Length <= 18 ? "0" : balance.Substring(0, balance.Length - 18);
+
+            // Extract only 2 decimal points
+            string fractionalPart = balance.Substring(balance.Length - 18);
+
+            // Combine the integer part with the decimal part
+            string decimalStr = $"{integerPart}.{fractionalPart.Substring(0, 2)}";
+
+            // Parse the decimal string to a double
+            return double.Parse(decimalStr);
         }
     }
 }

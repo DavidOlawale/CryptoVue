@@ -17,15 +17,15 @@ namespace CryptoVue.Controllers
         }
 
         [Authorize]
-        [HttpPost("calculatesupply")]
-        public async Task<IActionResult> CalculateSupply()
+        [HttpPost("updatesupply")]
+        public async Task<IActionResult> UpdateSupply()
         {
             await tokenService.FetchTokenDataAsync();
-            return Created();
+            return Ok();
         }
 
         [HttpGet("getsupply")]
-        public async Task<ActionResult<CryptoTokenSnapshot?>> GetSuppy()
+        public async Task<ActionResult<TokenDataRecord?>> GetSuppy()
         {
             return await tokenService.GetStoredDataAsync();
         }

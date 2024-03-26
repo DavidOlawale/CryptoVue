@@ -6,6 +6,6 @@ namespace CryptoVue.Services
     {
         public Task FetchTokenDataAsync();
 
-        public Task<CryptoTokenSnapshot?> GetStoredDataAsync();
+        public Task<TokenDataRecord?> GetStoredDataAsync();
     }
 }

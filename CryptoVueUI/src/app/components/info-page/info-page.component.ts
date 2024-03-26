@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TokenService } from '../../services/token.service';
+import { BaseComponent } from '../../BaseComponent';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-info-page',
@@ -8,13 +11,14 @@ import { TokenService } from '../../services/token.service';
   templateUrl: './info-page.component.html',
   styleUrl: './info-page.component.css'
 })
-export class InfoPageComponent implements OnInit {
+export class InfoPageComponent extends BaseComponent {
   tokenData: TokenData | null = null;
 
-  constructor(private tokenService: TokenService){
+  constructor(private tokenService: TokenService, private toastr: ToastrService){
+    super(toastr);
   }
   
-  ngOnInit() {
+  override ngOnInit() {
     this.tokenService.getTokenData()
       .subscribe(data => {
         this.tokenData = data;
