@@ -1,0 +1,21 @@
+.info-container {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 20px auto;
+    max-width: 700px;
+  }
+  
+li{
+  padding-top: 15px;
+}
+  .info-label {
+    font-weight: bold;
+    display: inline-block;
+    width: 120px;
+  }
+  
+  .info-value {
+    margin-left: 20px;
+  }
+  

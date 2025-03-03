@@ -1,0 +1,13 @@
+.update-container {
+    padding: 20px;
+  }
+  
+  .error-message {
+    color: red;
+  }
+  
+  button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  

@@ -1,0 +1,124 @@
+.container {
+    max-width: 1600px;
+    margin-top: 30px;
+}
+
+.card, .wallet-list, .vesting-table-container {
+    background-color: inherit;
+    border-radius: 10px;    
+    padding: 20px;
+    border: 1px solid #30363D;
+}
+.chart-container {
+    width: 100%;
+    max-width: 350px;
+    height: 350px;
+    margin: 0px auto;
+}
+.vesting-table th, .vesting-table td {
+    color: white;
+    background-color: transparent;
+    border: none;
+}
+.wallet-list .list-group-item {
+    background-color: transparent;
+    border: none;
+    color: white;
+}
+.btn-group .btn {
+    background-color: #333;
+    color: white;
+    border: none;
+}
+.btn-group .btn.active {
+    background-color: #8B5CF6;
+}
+.vesting-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table {
+    color: white;
+    border-top: none;
+}
+.table th {
+    font-weight: 600;
+    font-size: 16px;
+}
+.table tbody tr {
+    border-top: 1px solid #30363D;;
+}
+.wallet-address {
+    font-size: 14px;
+    color: #aaa;
+}
+.balance {
+    color: #00ff88;
+    font-weight: 500;
+}
+
+.table-container {
+    border-radius: 8px;
+    padding: 15px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+th {
+    color: #8B949E;
+}
+.progress-container {
+    display: flex;
+    align-items: center;
+}
+.progress {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background-color: #30363D;
+}
+.progress-bar-unlocked {
+    background-color: #2EA043;
+    height: 100%;
+    border-radius: 3px;
+}
+.progress-bar-locked {
+    background-color: #E5534B;
+    height: 100%;
+    border-radius: 3px;
+}
+.toggle-buttons{
+    border: 1px solid #30363D;
+    padding: 6px;
+    border-radius: 6px
+}
+.toggle-buttons button {
+    /* border: 1px solid #30363D; */
+    color: #C9D1D9;
+    margin-right: 10px;
+}
+.toggle-buttons .active {
+    background-color: #161b26;
+    border-color: #8B949E;
+}
+
+.vesting-schedule-header{
+    display: flex;
+    justify-content: space-between;
+    margin: 60px 20px 20px;
+}
+
+.round-label {
+    color: #aaa;
+}
+.timeline-bar {
+    height: 52px;
+    border-radius: 5px;
+}
