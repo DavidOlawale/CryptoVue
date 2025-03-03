@@ -1,11 +1,12 @@
 ﻿using CryptoVue.Data.Models;
+using CryptoVue.Dtos;
 
 namespace CryptoVue.Services
 {
     public interface IBLPTokenService
     {
-        public Task FetchTokenDataAsync();
-
         public Task<TokenDataRecord?> GetStoredDataAsync();
+
+        public Task<DashboardDTO> FetchDashboardDataAsync();
     }
 }

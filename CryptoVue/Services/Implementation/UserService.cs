@@ -18,7 +18,7 @@ namespace CryptoVue.Services.Implementation
             return _dbContext.Users.SingleOrDefault(u => u.Email == email);
         }
 
-        public bool IsAuthenticated(string password, string passwordHash)
+        public bool VerifyPassword(string password, string passwordHash)
         {
             return BCrypt.Net.BCrypt.Verify(password, passwordHash);
         }

@@ -27,7 +27,7 @@ namespace CryptoVue.Controllers
         {
             var user = _userService.GetUser(model.Email);
 
-            if (user is not null && _userService.IsAuthenticated(model.Password, user!.PasswordHash))
+            if (user is not null && _userService.VerifyPassword(model.Password, user!.PasswordHash))
             {
                 var token = _jwtService.GenerateToken(user);
                 return Ok(new { token });

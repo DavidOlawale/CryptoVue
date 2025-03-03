@@ -17,12 +17,14 @@ namespace CryptoVue.Common.BscScan
         public string Message { get; set; }
 
         [JsonPropertyName("result")]
-        public IEnumerable<AccountBalance> Result { get; set; }
+        //public IEnumerable<AccountBalance> Result { get; set; }
+        public string? Result { get; set; }
+
     }
 
-    public class AccountBalance
-    {
-        [JsonPropertyName("balance")]
-        public string Balance { get; set; }
-    }
+    //public class AccountBalance
+    //{
+    //    [JsonPropertyName("balance")]
+    //    public string Balance { get; set; }
+    //}
 }
